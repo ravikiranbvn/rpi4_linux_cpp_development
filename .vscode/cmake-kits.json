@@ -1,0 +1,8 @@
+{
+    "name": "GCC Raspberry PI",
+    "toolchainFile": "${workspaceRoot}/rpi-arm64-toolchain.cmake",
+    "cmakeSettings:" {
+        "CMAKE_INSTALL_PREFIX:PATH":"${workspaceRoot}/build/deploy",
+        "CMAKE_MODULE_PATH:PATH":"${workspaceRoot}/cmake"
+    }
+}
