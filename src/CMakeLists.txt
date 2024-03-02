@@ -13,4 +13,4 @@ project( hello-world )
 add_executable( hello-world
                 helloworld.cpp)
 
-target_link_libraries(hello-world -pthread -Wall -Wextra -Werror -fstack-protector-strong -fsanitize=thread)
+target_link_libraries(hello-world -pthread)

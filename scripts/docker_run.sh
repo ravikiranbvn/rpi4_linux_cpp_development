@@ -12,7 +12,7 @@ if ! command -v docker &> /dev/null; then
 fi
 
 # Check if the Docker image exists
-IMAGE_NAME="rpi4-linux-dev"
+IMAGE_NAME="rkbvn89/rpi4_linux_dev"
 if ! docker image inspect $IMAGE_NAME &> /dev/null; then
     handle_error "Docker image '$IMAGE_NAME' not found. Please pull the image or specify a valid image name."
 fi

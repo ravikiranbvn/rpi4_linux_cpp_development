@@ -3,7 +3,7 @@
 all: build run
 
 build:
-	docker build -t rpi4-linux-dev .
+	docker build -t rkbvn89/rpi4_linux_dev .
 
 run:
 	./scripts/docker_run.sh
