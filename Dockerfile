@@ -63,12 +63,21 @@ RUN apt-get update && \
         wget \
         python3 \
         unzip \
-        gcc g++ gperf bison flex texinfo help2man make libncurses5-dev \
-        python3-dev libtool automake libtool-bin gawk wget rsync git patch \
-        unzip xz-utils bzip2 ca-certificates && \
+        gcc g++ gperf bison flex texinfo help2man libncurses5-dev \
+        python3-dev libtool automake libtool-bin gawk wget git patch \
+        xz-utils bzip2 ca-certificates && \
         apt-get clean autoclean && \
         apt-get autoremove -y && \
         rm -rf /var/lib/apt/lists/*
+
+# Set the working directory inside the container
+WORKDIR /opt/compiler
+
+# Copy the x-tools toolchain directory into the container
+COPY x-tools /opt/compiler
+
+# Set permissions for the toolchain directory to allow access for builduser
+RUN chown -R ${USERNAME}:${GROUPNAME} /opt/compiler
 
 # Set up working directory
 WORKDIR /home/${USERNAME}/
@@ -79,31 +88,5 @@ RUN chown -R ${USERNAME}:${GROUPNAME} /home/${USERNAME}/
 # Switch to the builduser
 USER ${USERNAME}
 
-# Clean up
-WORKDIR /home/${USERNAME}/
-RUN rm -rf crosstool-ng
-
-# Clone Crosstool-NG repository
-RUN git clone https://github.com/crosstool-ng/crosstool-ng.git
-
-# Set up Crosstool-NG
-WORKDIR /home/${USERNAME}/crosstool-ng
-RUN git checkout crosstool-ng-1.26.0 -b 1.26.0 && \
-    ./bootstrap && \
-    ./configure --prefix=/home/${USERNAME}/crosstool-ng && \
-    make -j$(nproc) && \
-    make install
-
-# Add the toolchain to PATH
-ENV PATH="/home/${USERNAME}/crosstool-ng/bin:${PATH}"
-
-RUN echo $PATH
-
-# Set up configuration for Raspberry Pi 4 (aarch64)
-RUN ct-ng aarch64-rpi4-linux-gnu
-
-# Build the toolchain
-RUN ct-ng build
-
-# Mount the local disk to /workspace in the container
-VOLUME /workspace
+# Set environment variables for the toolchain paths
+ENV PATH="/opt/compiler/aarch64-rpi4-linux-gnu/bin:${PATH}"

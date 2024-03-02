@@ -3,7 +3,7 @@ set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR arm)
 
 set(CMAKE_TARGET_IS_RPI 1 CACHE INTERNAL "is raspberry pi build")
-set (XTOOLS_COMPILER_DIR "/home/builduser/x-tools/aarch64-rpi4-linux-gnu")
+set (XTOOLS_COMPILER_DIR "/opt/compiler/aarch64-rpi4-linux-gnu")
 if (IS_DIRECTORY ${XTOOLS_COMPILER_DIR})
   message("x-tools toolchain found")
   set(TOOLCHAIN_PREFIX  "aarch64-rpi4-linux-gnu-")
