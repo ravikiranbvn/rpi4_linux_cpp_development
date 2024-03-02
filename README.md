@@ -65,7 +65,7 @@ docker pull <container:tag>
 docker run --rm -it <container:tag>
 ```
 
-## 5. Makefile commands (project specific)
+## 5. project specific
 ```bash
 
 # build docker
@@ -78,6 +78,9 @@ make run
 $ cd rpi4_linux_cpp_development/src/build
 $ cmake -DCMAKE_TOOLCHAIN_FILE=/../../rpi-arm64-toolchain.cmake ..
 $ make
+
+# to pull docker image
+$ docker pull rkbvn89/rpi4_linux_dev:latest
 ```
 
 ## 6. Documentation
