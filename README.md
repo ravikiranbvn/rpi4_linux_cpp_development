@@ -4,7 +4,7 @@ All the resources in this repository are ONLY for learning purposes!
 
 # rpi4_linux_cpp_development
 ```
-- This is a simple demonstration to showcase the build docker with rpi4 kernel, tools and environment
+- This project build a docker with ubuntu 20.04, QEMU, toolchain setup and C/C++ environment using VSCode/CMake.
 ```
 
 # Environment setup
@@ -24,7 +24,32 @@ sudo usermod -aG docker username
 
 https://docs.docker.com/desktop/install/windows-install/
 
-### brief commands
+## 3. Tool chain set up using Crosstool-NG
+
+```bash
+$ git clone https://github.com/crosstool-ng/crosstool-ng
+$ cd crosstool-ng/
+
+# Switch to the latest release
+$ git checkout crosstool-ng-1.26.0 -b 1.26.0
+
+$ ./bootstrap
+$ ./configure --prefix=${PWD}
+$ make
+$ make install
+$ export PATH="${PWD}/bin:${PATH}"
+
+# configure
+$ ct-ng menuconfig
+
+# set for rpi4
+$ ct-ng aarch64-rpi4-linux-gnu
+
+# build
+ct-ng build
+```
+
+## 4. Docker commands
 ```bash
 docker build --rm --tag <container:tag> -f Dockerfile .
 docker run <container:tag>
@@ -33,7 +58,17 @@ docker pull <container:tag>
 docker run --rm -it <container:tag>
 ```
 
-## 3. Documentation
+## 5. Makefile commands (project specific)
+```bash
+
+# build docker
+make build
+
+# run docker
+make run
+```
+
+## 6. Documentation
 
 ### Tutorial on docker file:        [Dockerfile](https://docs.docker.com/get-started/02_our_app/)
 ### Tutorial on Github yaml file:   [Github](https://docs.github.com/en/actions/quickstart)  
