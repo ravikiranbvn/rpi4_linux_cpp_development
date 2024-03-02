@@ -47,6 +47,13 @@ $ ct-ng aarch64-rpi4-linux-gnu
 
 # build
 ct-ng build
+
+# check config file
+ct-ng .config
+
+# sample config
+ct-ng list-samples
+ct-ng show-aarch64-rpi4-linux-gnu
 ```
 
 ## 4. Docker commands
@@ -66,6 +73,11 @@ make build
 
 # run docker
 make run
+
+# to run hello-world ex
+$ cd rpi4_linux_cpp_development/src/build
+$ cmake -DCMAKE_TOOLCHAIN_FILE=/../../rpi-arm64-toolchain.cmake ..
+$ make
 ```
 
 ## 6. Documentation

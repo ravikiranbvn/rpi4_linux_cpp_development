@@ -12,7 +12,6 @@ RUN groupadd -g ${GID} ${GROUPNAME} && \
     useradd -m -u ${UID} -g ${GROUPNAME} -s /bin/bash ${USERNAME}
 
 # Install required packages
-# Install required packages, including Linux tools for the kernel version of the host machine
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends\
         build-essential \
@@ -39,7 +38,7 @@ RUN apt-get update && \
         flex \
         libssl-dev \
         make \
-        libc6-dev \
+	libc6-dev \
         libncurses5-dev \
         fuse \
         gdb-multiarch \
@@ -48,7 +47,6 @@ RUN apt-get update && \
         clang \
         cmake \
         pkg-config \
-        libboost-all-dev \
         libyaml-cpp-dev \
         libyaml-dev \
         strace \
@@ -63,8 +61,8 @@ RUN apt-get update && \
         wget \
         python3 \
         unzip \
-        gcc g++ gperf bison flex texinfo help2man libncurses5-dev \
-        python3-dev libtool automake libtool-bin gawk wget git patch \
+        gcc g++ gperf texinfo help2man \
+        libtool automake libtool-bin gawk patch \
         xz-utils bzip2 ca-certificates && \
         apt-get clean autoclean && \
         apt-get autoremove -y && \
