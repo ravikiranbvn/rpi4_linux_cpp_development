@@ -14,7 +14,7 @@ RUN groupadd -g ${GID} ${GROUPNAME} && \
 # Install required packages
 # Install required packages, including Linux tools for the kernel version of the host machine
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends\
         build-essential \
         vim \
         tree \
@@ -62,7 +62,13 @@ RUN apt-get update && \
         man-db \
         wget \
         python3 \
-        unzip
+        unzip \
+        gcc g++ gperf bison flex texinfo help2man make libncurses5-dev \
+        python3-dev libtool automake libtool-bin gawk wget rsync git patch \
+        unzip xz-utils bzip2 ca-certificates && \
+        apt-get clean autoclean && \
+        apt-get autoremove -y && \
+        rm -rf /var/lib/apt/lists/*
 
 # Set up working directory
 WORKDIR /home/${USERNAME}/
@@ -73,29 +79,31 @@ RUN chown -R ${USERNAME}:${GROUPNAME} /home/${USERNAME}/
 # Switch to the builduser
 USER ${USERNAME}
 
+# Clean up
+WORKDIR /home/${USERNAME}/
+RUN rm -rf crosstool-ng
+
 # Clone Crosstool-NG repository
 RUN git clone https://github.com/crosstool-ng/crosstool-ng.git
 
 # Set up Crosstool-NG
 WORKDIR /home/${USERNAME}/crosstool-ng
-RUN git checkout remotes/origin/next && \
+RUN git checkout crosstool-ng-1.26.0 -b 1.26.0 && \
     ./bootstrap && \
-    ./configure --enable-local && \
-    make && \
+    ./configure --prefix=/home/${USERNAME}/crosstool-ng && \
+    make -j$(nproc) && \
     make install
 
-# Clean up
-WORKDIR /home/${USERNAME}/
-RUN rm -rf crosstool-ng
+# Add the toolchain to PATH
+ENV PATH="/home/${USERNAME}/crosstool-ng/bin:${PATH}"
+
+RUN echo $PATH
 
 # Set up configuration for Raspberry Pi 4 (aarch64)
-RUN ct-ng armv8-rpi4-linux-gnu
+RUN ct-ng aarch64-rpi4-linux-gnu
 
 # Build the toolchain
 RUN ct-ng build
-
-# Add the toolchain to PATH
-ENV PATH="/home/${USERNAME}/x-tools/armv8-rpi4-linux-gnu/bin:${PATH}"
 
 # Mount the local disk to /workspace in the container
 VOLUME /workspace
